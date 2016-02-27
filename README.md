@@ -1,36 +1,39 @@
 # CallibreHack backend
 
-## Testing
+## Development environment
+
+```console
+$ virtualenv -ppython2.7 .venv
+$ pip install -r requirements.txt
+```
+
+## Manual testing
 
 We need three open terminals:
 
 On the first one, create virtual connection:
 
-```
+```console
 $ socat -d -d pty,link=/tmp/a,raw,echo=0 pty,link=/tmp/b,raw,echo=0
 ```
 
 On the second one, launch the fetcher:
 
-```
+```console
 $ python fetch.py /tmp/a
 ```
 
 Finally launch the emulator:
 
-```
+```console
 $ python emulator.py /tmp/b
 ```
 
-
 ## Testing prerequisites
 
-```
+```console
 $ sudo apt-get install socat
-$ virtualenv -ppython2.7 .venv
-$ pip install -r requirements.txt
 ```
-
 
 ## License
 
