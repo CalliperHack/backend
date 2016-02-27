@@ -6,8 +6,9 @@ import serial
 def write(stream):
     port = '/tmp/b'
     conf = dict(port=port, baudrate=115200, timeout=0, rtscts=True, dsrdtr=True)
-    print('Connecting ', port)
+    print('Connecting', port)
     with serial.Serial(**conf) as ser:
+        print('Sending', repr(stream))
         ser.write(stream)
 
 

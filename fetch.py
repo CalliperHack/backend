@@ -6,12 +6,12 @@ import serial
 
 
 def process_stream(stream):
-    print('Received ', repr(stream))
+    print('Received', repr(stream))
 
 
 def read(port, handler):
     conf = dict(port=port, baudrate=115200, timeout=0, rtscts=True, dsrdtr=True)
-    print('Connecting ', port)
+    print('Connecting', port)
     with serial.Serial(**conf) as ser:
         while True:
             received = ser.read(1024)
