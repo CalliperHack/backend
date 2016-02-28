@@ -14,11 +14,6 @@ def process_stream(stream):
     print('Received', repr(stream))
 
 
-def publish_to_mqtt(client, stream):
-    print('Publishing', repr(stream))
-    client.publish(MQTT_TOPIC, 42)
-
-
 def read(port, handler):
     conf = dict(port=port, baudrate=115200, timeout=0, rtscts=True, dsrdtr=True)
     print('Connecting', port)
@@ -36,10 +31,20 @@ def parse_args():
     return parser.parse_args()
 
 
+class Controller:
+    def __init__(self, client):
+        self.client = client
+        self.last_measurement = 0
+
+    def process_stream(self, stream):
+        print('Publishing', repr(stream))
+        self.client.publish(MQTT_TOPIC, 42)
+
+
 if __name__ == '__main__':
     args = parse_args()
     port =  args.port
     client = paho.Client()
+    controller = Controller(client)
     client.connect(args.broker)
-    handler = partial(publish_to_mqtt, client)
-    read(port, handler)
+    read(port, controller.process_stream)
