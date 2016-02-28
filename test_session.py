@@ -14,6 +14,7 @@ fetcher = subprocess.Popen(
         'python',
         'fetch.py',
         '/tmp/a',
+        'test.mosquitto.org',
     ]
 )
 

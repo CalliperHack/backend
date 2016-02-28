@@ -1,8 +1,7 @@
 from __future__ import print_function
 
+import argparse
 from functools import partial
-
-import sys
 
 import serial
 
@@ -14,7 +13,6 @@ except ImportError:
     MQTT_CLIENT_CLASS = mosquitto.Mosquitto
 
 
-MQTT_SERVER = 'test.mosquitto.org'
 MQTT_TOPIC = 'CallibreHack'
 
 
@@ -37,9 +35,17 @@ def read(port, handler):
                 handler(received)
 
 
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('port', help='Serial port', default='/dev/ttymxc0')
+    parser.add_argument('broker', help='MQTT server', default='localhost')
+    return parser.parse_args()
+
+
 if __name__ == '__main__':
-    port =  sys.argv[1]  # /dev/ttymxc0
+    args = parse_args()
+    port =  args.port
     client = MQTT_CLIENT_CLASS()
-    client.connect(MQTT_SERVER)
+    client.connect(args.broker)
     handler = partial(publish_to_mqtt, client)
     read(port, handler)
