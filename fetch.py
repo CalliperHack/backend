@@ -1,7 +1,6 @@
 from __future__ import print_function
 
 import argparse
-from functools import partial
 
 import paho.mqtt.client as paho
 import serial
@@ -43,7 +42,7 @@ class Controller:
 
 if __name__ == '__main__':
     args = parse_args()
-    port =  args.port
+    port = args.port
     client = paho.Client()
     controller = Controller(client)
     client.connect(args.broker)
