@@ -38,7 +38,7 @@ def read(port, handler):
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('port', help='Serial port', default='/dev/ttymxc0')
-    parser.add_argument('broker', help='MQTT server', default='localhost')
+    parser.add_argument('broker', help='MQTT server', nargs='?', default='localhost')
     return parser.parse_args()
 
 
