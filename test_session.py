@@ -9,11 +9,16 @@ socat = subprocess.Popen([
     'pty,link=/tmp/b,raw,echo=0',
 ])
 
-fetcher = subprocess.Popen([
-    'python',
-    'fetch.py',
-    '/tmp/a',
-])
+fetcher = subprocess.Popen(
+    [
+        'python',
+        'fetch.py',
+        '/tmp/a',
+    ]
+)
+
+# Wait for fetcher
+time.sleep(1)
 
 emulator = subprocess.Popen([
     'python',
@@ -21,6 +26,7 @@ emulator = subprocess.Popen([
     '/tmp/b',
 ])
 
-time.sleep(0.1)
-fetcher.kill()
-socat.kill()
+emulator.wait()
+time.sleep(0.2)
+fetcher.terminate()
+socat.terminate()
