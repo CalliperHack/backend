@@ -1,10 +1,11 @@
 from __future__ import print_function
 
+from functools import partial
+
 import sys
 
 import serial
 
-MQTT_CLIENT_CLASS = None
 try:
     import paho.mqtt.client as paho
     MQTT_CLIENT_CLASS = paho.Client
@@ -13,8 +14,17 @@ except ImportError:
     MQTT_CLIENT_CLASS = mosquitto.Mosquitto
 
 
+MQTT_SERVER = 'test.mosquitto.org'
+MQTT_TOPIC = 'CallibreHack'
+
+
 def process_stream(stream):
     print('Received', repr(stream))
+
+
+def publish_to_mqtt(client, stream):
+    print('Publishing', repr(stream))
+    client.publish(MQTT_TOPIC, 42)
 
 
 def read(port, handler):
@@ -29,4 +39,7 @@ def read(port, handler):
 
 if __name__ == '__main__':
     port =  sys.argv[1]  # /dev/ttymxc0
-    read(port, process_stream)
+    client = MQTT_CLIENT_CLASS()
+    client.connect(MQTT_SERVER)
+    handler = partial(publish_to_mqtt, client)
+    read(port, handler)
