@@ -4,6 +4,14 @@ import sys
 
 import serial
 
+MQTT_CLIENT_CLASS = None
+try:
+    import paho.mqtt.client as paho
+    MQTT_CLIENT_CLASS = paho.Client
+except ImportError:
+    import mosquitto
+    MQTT_CLIENT_CLASS = mosquitto.Mosquitto
+
 
 def process_stream(stream):
     print('Received', repr(stream))

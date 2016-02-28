@@ -1,1 +1,2 @@
 pyserial==3.0.1
+paho-mqtt==1.1
