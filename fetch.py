@@ -3,14 +3,8 @@ from __future__ import print_function
 import argparse
 from functools import partial
 
+import paho.mqtt.client as paho
 import serial
-
-try:
-    import paho.mqtt.client as paho
-    MQTT_CLIENT_CLASS = paho.Client
-except ImportError:
-    import mosquitto
-    MQTT_CLIENT_CLASS = mosquitto.Mosquitto
 
 
 MQTT_TOPIC = 'CallibreHack'
@@ -45,7 +39,7 @@ def parse_args():
 if __name__ == '__main__':
     args = parse_args()
     port =  args.port
-    client = MQTT_CLIENT_CLASS()
+    client = paho.Client()
     client.connect(args.broker)
     handler = partial(publish_to_mqtt, client)
     read(port, handler)
