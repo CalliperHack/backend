@@ -7,6 +7,10 @@ $ virtualenv -ppython2.7 .venv
 $ pip install -r requirements.txt
 ```
 
+Why python 2?
+
+Udoo Neo include python3.4 but not pyserial for python3.
+
 ## Manual testing
 
 We need three open terminals:
