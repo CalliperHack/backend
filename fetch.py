@@ -1,6 +1,9 @@
 from __future__ import print_function
 
 import argparse
+import re
+import time
+import uuid
 
 import paho.mqtt.client as paho
 import serial
@@ -31,13 +34,41 @@ def parse_args():
 
 
 class Controller:
+    BUTTON = re.compile(r'BTN ([A-Z])')
+    MEASUREMENT = re.compile(r'M (\d+)')
+
     def __init__(self, client):
         self.client = client
         self.last_measurement = 0
 
-    def process_stream(self, stream):
+    def publish(self, data):
+        message = {
+            'ts': time.time(),
+            'uuid': uuid.uuid4()
+        }
+        message.update(data)
         print('Publishing', repr(stream))
-        self.client.publish(MQTT_TOPIC, 42)
+        self.client.publish(MQTT_TOPIC, message)
+    def is_measurement(self, stream):
+
+        match = self.MEASUREMENT.match(stream)
+        if not match:
+            return None
+        else:
+            return int(match.group(1))
+
+    def is_button(self, stream):
+        match = self.BUTTON.match(stream)
+        if not match:
+            return None
+        else:
+            return match.group(1)
+
+    def process_stream(self, stream):
+        stream = stream.strip()
+        command = self.is_measurement(stream)
+        if command:
+            self.publish({'measurement': command})
 
 
 if __name__ == '__main__':
